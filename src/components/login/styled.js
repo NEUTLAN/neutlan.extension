@@ -36,6 +36,7 @@ export const StyledTextLabel = styled.label`
 export const StyledSelect = styled.select`
   width: 150px;
   height: 35px;
+  margin-right: 10px;
   background: white;
   color: gray;
   font-size: 1em;
@@ -95,8 +96,55 @@ export const StyledFooterText = styled.label`
 `;
 
 export const StyledHr = styled.hr`
-  margin-left: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
   border: 0.5px solid gray;
+`;
+
+export const StyledWelcomeFirst = styled.div`
+  margin-top: 10px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+  max-width: 400px;
+  max-height: 60px;
+  display: flex;
+`;
+
+export const StyledDivWelcomeSecond = styled.div`
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  margin-left: 10px;
+  max-width: 400px;
+  max-height: 60px;
+  display: flex;
+`;
+
+export const StyledButton = styled.button`
+  margin-top: 30px;
+  width: 10em;
+  height: 2.5em;
+  background-color: #ff6699;
+  font-family: "Century Gothic", Verdana, sans-serif;
+  color: white;
+  font-size: 1em;
+  border: 2px solid palevioletred;
+  border-radius: 0.5em;
+  box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.24);
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s all;
+  :hover {
+    border: 1px solid #0099cc;
+    background-color: #00aacc;
+    color: #ffffff;
+  }
+  :active {
+    transform: scale(0.98);
+    /* Scaling button to 0.98 to its original size */
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+    /* Lowering the shadow */
+  }
 `;
