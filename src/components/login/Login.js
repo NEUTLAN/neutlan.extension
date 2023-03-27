@@ -16,7 +16,7 @@ import {
   StyledFooterText,
   StyledHr,
 } from "./styled.js";
-import "animate.css";
+
 import neutlan_extension_header from "../../assets/img/neutlan_extension_header.png";
 
 import Cookies from "js-cookie";

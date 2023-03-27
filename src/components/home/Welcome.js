@@ -13,11 +13,12 @@ import {
   StyledHr,
   StyledButton,
 } from "./styled";
-import "animate.css";
+
 import neutlan_extension_header from "../../assets/img/neutlan_extension_header.png";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  
   const signIn = () => {
     let token = generateToken(128);
     localStorage.setItem("extesionSignIn", token);
