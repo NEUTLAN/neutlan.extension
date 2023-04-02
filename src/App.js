@@ -4,12 +4,12 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // import components
 import Login from "./components/login/Login.js";
-import Welcome from "./components/home/Welcome";
+import Home from "./components/home/Home.js";
 
 function App() {
   const [token, setToken] = useState("");
   useEffect(() => {
-    const userToken = localStorage.getItem("extesionSignIn");
+    const userToken = localStorage.getItem("extension-token");
     if (userToken) {
       fetch("https://neutlan.com/api/auth/sign_in_with_token", {
         method: "POST",
@@ -23,8 +23,9 @@ function App() {
         .then((response) => {
           if (response.ok) {
             return response.json().then((data) => {
-              localStorage.removeItem("extesionSignIn");
+              localStorage.removeItem("extension-token");
               localStorage.setItem("token", data.token);
+              console.log("Token:", data.token);
               setToken(data.token);
               localStorage.setItem(
                 "extensionActivated",
@@ -57,9 +58,9 @@ function App() {
         <Routes>
           {/* <Route path={ROUTERS.WELCOME} element={<Welcome />} /> */}
           {localStorage.getItem("token")?.length > 0 ? (
-            <Route path={"*"} element={<Login />} />
+            <Route path={"*"} element={<Home />} />
           ) : (
-            <Route path="*" element={<Welcome />} />
+            <Route path="*" element={<Login />} />
           )}
 
           <Route render={() => <h1>404 Page not found</h1>} />

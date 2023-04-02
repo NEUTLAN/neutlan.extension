@@ -4,8 +4,7 @@ const BackgroundFunction = () => {
   const [sentences, setSentence] = useState("");
 
   const sentencesGet = () => {
-    console.log("fonksiyon ok");
-    window.addEventListener("keyup", myEventListener);
+
     function myEventListener(event) {
       document.body.onkeyup = function (e) {
         if (e.key === " " || e.code === "Space") {
@@ -19,7 +18,10 @@ const BackgroundFunction = () => {
           }
         }
       };
-    }
+    };
+
+    window.addEventListener("keyup", myEventListener);
+    
   };
   sentencesGet();
   console.log(sentences);
