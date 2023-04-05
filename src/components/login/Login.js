@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   StyledImg,
@@ -15,16 +14,13 @@ import {
 import neutlan_extension_header from "../../assets/img/neutlan_extension_header.png";
 
 const Login = () => {
-  const navigate = useNavigate();
   
   const signIn = () => {
     let token = generateToken(128);
+    console.log("Token: ", token)
+    localStorage.removeItem("extension-token");
     localStorage.setItem("extension-token", token);
-    window.open(
-      "https://neutlan.com/sign-in?" + token,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    window.open("https://neutlan.com/sign-in?" + token);
   };
 
   function generateToken(n) {

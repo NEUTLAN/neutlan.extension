@@ -1,6 +1,7 @@
 import "./App.css";
 import React, { useState, useEffect, Fragment } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { API } from "./api-service";
 
 // import components
 import Login from "./components/login/Login.js";
@@ -10,46 +11,30 @@ function App() {
   const [token, setToken] = useState("");
   useEffect(() => {
     const userToken = localStorage.getItem("extension-token");
+    
     if (userToken) {
-      fetch("https://neutlan.com/api/auth/sign_in_with_token", {
-        method: "POST",
-        body: JSON.stringify({
-          token: userToken,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
+      console.log('userToken ', userToken);
+      API.post('auth/sign_in_with_token', null, {'token': userToken})
+      .then( async (response) => {
+        if (response.ok) {
+          response.json().then( data => {
+            localStorage.removeItem("extension-token");
+            localStorage.setItem("token", data.token);
+            setToken(data.token);
+            localStorage.setItem("extensionActivated", data.settings.extension_activated);
+            console.log("token: ", data.token)
+          })
+        } else {
+          const data_1 = await response.json();
+          alert(data_1.error);
+        }
       })
-        .then((response) => {
-          if (response.ok) {
-            return response.json().then((data) => {
-              localStorage.removeItem("extension-token");
-              localStorage.setItem("token", data.token);
-              console.log("Token:", data.token);
-              setToken(data.token);
-              localStorage.setItem(
-                "extensionActivated",
-                data.settings.extension_activated
-              );
-              console.log(
-                "token",
-                data.token,
-                "activated",
-                data.settings.extension_activated
-              );
-            });
-          } else {
-            return response.json().then((data) => {
-              alert(data.error);
-            });
-          }
-        })
-
-        .catch((error) => {
-          console.error("Error:", error);
-        });
+      .catch((error) => {
+        console.error("Error:", error);
+      });
     }
   }, [token]);
+  
   return (
     <Fragment>
       <Router>
