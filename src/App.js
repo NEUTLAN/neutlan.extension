@@ -9,17 +9,22 @@ import Home from "./components/home/Home.js";
 
 function App() {
   const [token, setToken] = useState("");
+  const chrome = window.chrome;
   useEffect(() => {
     const userToken = localStorage.getItem("extension-token");
     
     if (userToken) {
       console.log('userToken ', userToken);
-      API.post('auth/sign_in_with_token', null, {'token': userToken})
+      API.post('/user/auth/sign_in_with_token', null, {'token': userToken})
       .then( async (response) => {
         if (response.ok) {
           response.json().then( data => {
             localStorage.removeItem("extension-token");
+            console.log(data.toke)
             localStorage.setItem("token", data.token);
+            chrome.storage.local.set({token: data.token, activated: true}, function() {
+              console.log("Values saved");
+            });
             setToken(data.token);
             localStorage.setItem("extensionActivated", data.settings.extension_activated);
             console.log("token: ", data.token)
@@ -27,6 +32,7 @@ function App() {
         } else {
           const data_1 = await response.json();
           alert(data_1.error);
+          //lara-1:Delete all past tokens
         }
       })
       .catch((error) => {

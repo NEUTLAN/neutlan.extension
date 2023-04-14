@@ -25,15 +25,18 @@ import neutlan_extension_header from "../../assets/img/neutlan_extension_header.
 const Home = () => {
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
-
+  const chrome = window.chrome;
   const handleCheckbox = (event) => {
     let token = localStorage.getItem("token");
     if (isChecked) {
-      API.post('user/deactivate', token)
+      API.post('/user/deactivate', token)
       .then((response) => {
         if (response.ok) {
           setIsChecked(!isChecked);
           localStorage.setItem("activated", !isChecked);
+          chrome.storage.local.set({activated: !isChecked}, function() {
+            console.log("Values saved");
+          });
         } else {
           return response.json().then((data) => {
             alert(data.error);
@@ -44,11 +47,14 @@ const Home = () => {
         console.error("Error:", error);
       });
     } else {
-      API.post('user/activate', token)
+      API.post('/user/activate', token)
       .then((response) => {
         if (response.ok) {
           setIsChecked(!isChecked);
           localStorage.setItem("activated", !isChecked);
+          chrome.storage.local.set({activated: !isChecked}, function() {
+            console.log("Values saved");
+          });
         } else {
           return response.json().then((data) => {
             alert(data.error);
@@ -75,7 +81,7 @@ const Home = () => {
   useEffect(() => {
     let token = localStorage.getItem("token");
 
-    API.post('user/check_activation', token)
+    API.post('/user/check_activation', token)
     .then( async (response) => {
       if (response.ok) {
         const data = await response.json();
