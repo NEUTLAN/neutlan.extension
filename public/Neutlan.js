@@ -1,7 +1,8 @@
 let target;
 let sentencesArray = [];
 let styledTextElement = document.createElement('div');
-
+let size = 'large';
+let font = 'arial, sans-serif';
 // Toke taken fromthe choreme storage you always loged in if you not delete chorome storage and logout
 chrome.storage.local.get(['token', 'activated'], function (result) {
   let token = result.token;
@@ -68,6 +69,8 @@ updateContainer = () => {
       spanElement.style.textDecoration = 'underline';
       spanElement.style.textDecorationColor = 'red';
       spanElement.style.fontSize = 'xx-large';
+      spanElement.style.fontSize = size;
+      spanElement.style.fontFamily = font;
       spanElement.innerHTML = index.sentence;
       styledTextElement.appendChild(spanElement);
     } else {
@@ -75,6 +78,8 @@ updateContainer = () => {
       const spanElement = document.createElement('span');
       spanElement.style.color = '#0000ff00';
       spanElement.style.fontSize = 'xx-large';
+      spanElement.style.fontSize = size;
+      spanElement.style.fontFamily = font;
       spanElement.innerHTML = index.sentence;
       styledTextElement.appendChild(spanElement);
     }
@@ -82,8 +87,8 @@ updateContainer = () => {
 
   const format = `
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: 10px;
+  right: 10px;
   height: 30px;
   width: 30px;
   font-size: 15px;
@@ -158,21 +163,26 @@ myEventListener = (event) => {
       isChecked: false,
     });
   });
-
+  const textarea = event.target;
+  styledTextElement.innerHTML = "";
+  styledTextElement.style.position = 'absolute';
+  styledTextElement.style.top = `2px`;
+  styledTextElement.style.left = `0px`;
+  styledTextElement.style.height = `100%`;
+  styledTextElement.style.width = `100%`;
+  styledTextElement.style.zIndex = "5";
+  styledTextElement.style.pointerEvents= 'none';
+  styledTextElement.style.padding=window.getComputedStyle(textarea).getPropertyValue('padding');
+  styledTextElement.style.margin= window.getComputedStyle(textarea).getPropertyValue('margin');
+  size =  window.getComputedStyle(textarea).getPropertyValue('font-size');
+  font = window.getComputedStyle(textarea).getPropertyValue('font-family');
+  parent = textarea.parentNode;
+  parent.appendChild(styledTextElement)
   document.body.onkeyup = function (e) {
-    const textarea = event.target;
-    styledTextElement.innerHTML = "";
-    styledTextElement.style.position = 'absolute';
-    styledTextElement.style.top = `-5px`;
-    styledTextElement.style.left = `0px`;
-    styledTextElement.style.height = `100%`;
-    styledTextElement.style.width = `100%`;
-    styledTextElement.style.zIndex = "-1";
-    parent = textarea.parentNode;
-    parent.appendChild(styledTextElement)
     let checked = localStorage.getItem("activated");
     if (e.key === "." || e.code === "Slash") {
       if (checked) {
+        styledTextElement.innerHTML = "";
         console.log(event.target.value)
         sentencesArray.map((index, number) => {
           if (index.isChecked === false) {
