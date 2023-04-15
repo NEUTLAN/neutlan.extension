@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-
+import Button from 'react-bootstrap/Button';
 import {
   StyledImg,
   StyledInformationContainer,
@@ -32,7 +32,7 @@ const Login = () => {
     }
     return token;
   }
-
+/*
   return (
     <Fragment>
       <StyledImg src={neutlan_extension_header}></StyledImg>
@@ -47,6 +47,26 @@ const Login = () => {
         <StyledFooterText>
         Since Nov 5,2022
         </StyledFooterText>
+      </StyledInformationContainer>
+    </Fragment>
+  );
+  */
+  return (
+    <Fragment>
+      <StyledImg src={neutlan_extension_header}></StyledImg>
+      <StyledInformationContainer>
+        <StyledTitleDiv>
+          <StyledTitle> Welcome to Neutlan</StyledTitle>
+        </StyledTitleDiv>
+        <StyledDivSecond>
+          <StyledButton onClick={signIn}> Sign In</StyledButton>
+        </StyledDivSecond>
+        <div>
+        <StyledHr />
+        <StyledFooterText>
+        Since Nov 5,2022
+        </StyledFooterText>
+        </div>
       </StyledInformationContainer>
     </Fragment>
   );

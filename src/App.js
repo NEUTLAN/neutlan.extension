@@ -12,35 +12,35 @@ function App() {
   const chrome = window.chrome;
   useEffect(() => {
     const userToken = localStorage.getItem("extension-token");
-    
+
     if (userToken) {
       console.log('userToken ', userToken);
-      API.post('/user/auth/sign_in_with_token', null, {'token': userToken})
-      .then( async (response) => {
-        if (response.ok) {
-          response.json().then( data => {
-            localStorage.removeItem("extension-token");
-            console.log(data.toke)
-            localStorage.setItem("token", data.token);
-            chrome.storage.local.set({token: data.token, activated: true}, function() {
-              console.log("Values saved");
-            });
-            setToken(data.token);
-            localStorage.setItem("extensionActivated", data.settings.extension_activated);
-            console.log("token: ", data.token)
-          })
-        } else {
-          const data_1 = await response.json();
-          alert(data_1.error);
-          //lara-1:Delete all past tokens
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+      API.post('/user/auth/sign_in_with_token', null, { 'token': userToken })
+        .then(async (response) => {
+          if (response.ok) {
+            response.json().then(data => {
+              localStorage.removeItem("extension-token");
+              console.log(data.token)
+              localStorage.setItem("token", data.token);
+              chrome.storage.local.set({ token: data.token, activated: data.settings.extension_activated }, function () {
+                console.log("Values saved");
+              });
+              setToken(data.token);
+              localStorage.setItem("extensionActivated", data.settings.extension_activated);
+              console.log("token: ", data.token)
+            })
+          } else {
+            const data_1 = await response.json();
+            alert(data_1.error);
+            //lara-1:Delete all past tokens
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   }, [token]);
-  
+
   return (
     <Fragment>
       <Router>
@@ -48,8 +48,9 @@ function App() {
     renders the first one that matches the current URL. */}
         <Routes>
           {/* <Route path={ROUTERS.WELCOME} element={<Welcome />} /> */}
-          {localStorage.getItem("token")?.length > 0 ? (
+          {localStorage.getItem("token")?.length > 10 ? (
             <Route path={"*"} element={<Home />} />
+
           ) : (
             <Route path="*" element={<Login />} />
           )}

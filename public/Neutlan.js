@@ -9,26 +9,38 @@ chrome.storage.local.get(['token', 'activated'], function (result) {
   let checked = result.activated;
   localStorage.setItem("token", token);
   localStorage.setItem("activated", checked)
+
 });
 // In your background page script
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
+
   for (var key in changes) {
     console.log("Runtimee")
-    if (key === 'activated') {
-      removeUnderline();
+    if (key == 'activated') {
+      console.log(changes[key].newValue)
       localStorage.setItem("activated", changes[key].newValue);
+      console.log(localStorage.getItem('activated'))
+      this.removeUnderline();
+    }
+    if (key == 'token' ) {
+      window.location.reload()
     }
   }
 });
 
+
 // Define function to remove underline
 function removeUnderline() {
-  console.log("Change Underline");
-
-  target.style.textDecoration = "none";
-  target.style.color = "black";
-
+  console.log("ın",localStorage.getItem('activated'))
+  if(localStorage.getItem('activated')== true){
+    console.log("add container")
+    this.updateContainer();
+  }else{
+    console.log("delete container")
+    styledTextElement.innerHTML = ""
+  }
+  
 }
 
 

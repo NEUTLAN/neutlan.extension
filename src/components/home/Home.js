@@ -23,6 +23,7 @@ import {
 import neutlan_extension_header from "../../assets/img/neutlan_extension_header.png";
 
 const Home = () => {
+  console.log(localStorage.getItem('token'))
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   const chrome = window.chrome;
@@ -39,7 +40,7 @@ const Home = () => {
           });
         } else {
           return response.json().then((data) => {
-            alert(data.error);
+            //alert(data.error);
           });
         }
       })
@@ -57,7 +58,7 @@ const Home = () => {
           });
         } else {
           return response.json().then((data) => {
-            alert(data.error);
+            //alert(data.error);
           });
         }
       })
@@ -75,7 +76,17 @@ const Home = () => {
     localStorage.removeItem("extension-token");
     localStorage.removeItem("extensionActivated");
     localStorage.removeItem("token");
-    navigate('');
+
+    window.location.reload()
+
+    chrome.storage.local.remove('activated', function() {
+      console.log('Checked value deleted');
+    });
+    chrome.storage.local.remove('token', function() {
+      console.log('Token value deleted');
+    });
+
+
   }
 
   useEffect(() => {
@@ -89,7 +100,7 @@ const Home = () => {
         setIsChecked(data.activated);
       } else {
         const data_1 = await response.json();
-        alert(data_1.error);
+        //alert(data_1.error);
       }
     })
     .catch((error) => {
@@ -117,30 +128,20 @@ const Home = () => {
             onChange={handleCheckbox}
           />
         </StyledDivFirst>
-        <StyledDivFirst>
-          <StyledTextLabel>Written Language</StyledTextLabel>
-          <StyledSelect>
-            <option defaultChecked="1">English</option>
-            <option value="2">Turkish</option>
-          </StyledSelect>
-        </StyledDivFirst>
-        <StyledHr />
         <StyledDivIcons>
           <IoNavigateOutline style={{ fontSize: "20px" }} />
           <StyledIconLabel onClick={goWebsite}>Go To Website</StyledIconLabel>
         </StyledDivIcons>
         <StyledDivIcons>
-          <SlSettings style={{ fontSize: "20px" }} />
-          <StyledIconLabel>Settings</StyledIconLabel>
-        </StyledDivIcons>
-        <StyledDivIcons>
           <TfiPowerOff style={{ fontSize: "20px" }} />
           <StyledIconLabel onClick={signOut}>Sign Out</StyledIconLabel>
         </StyledDivIcons>
+        <div>
         <StyledHr />
         <StyledFooterText>
           Since Nov 5,2022
         </StyledFooterText>
+        </div>
       </StyledInformationContainer>
     </Fragment>
   );

@@ -1,7 +1,6 @@
 export class API {
 
     static NEUTLAN_URL = 'https://neutlan.com/api';
-    //static NEUTLAN_URL_MODEL = 'https://neutlan.com/api';
 
     static post(endpoint, TOKEN = null, body = {}) {
         var headers = { 
