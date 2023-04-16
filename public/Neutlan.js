@@ -99,9 +99,10 @@ updateContainer = () => {
 
   const format = `
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: 2px;
+  right: -10px;
   height: 30px;
+  pointer-events: none;
   width: 30px;
   font-size: 15px;
   color: #fff;
@@ -166,6 +167,7 @@ handlePredict = (number) => {
 myEventListener = (event) => {
   target = event.target;
   event.target.classList.add('underline');
+  console.log( event)
   const myArray = event.target.value.split(/(?<=\.|\?|\!)\s/g);
   sentencesArray = [];
   myArray.map((item) => {
@@ -180,8 +182,9 @@ myEventListener = (event) => {
   styledTextElement.style.position = 'absolute';
   styledTextElement.style.top = `2px`;
   styledTextElement.style.left = `0px`;
-  styledTextElement.style.height = `100%`;
-  styledTextElement.style.width = `100%`;
+  styledTextElement.style.height = window.getComputedStyle(textarea).getPropertyValue('height');
+  styledTextElement.style.boxSizing = window.getComputedStyle(textarea).getPropertyValue('box-sizing');
+  styledTextElement.style.width = window.getComputedStyle(textarea).getPropertyValue('width');
   styledTextElement.style.zIndex = "5";
   styledTextElement.style.pointerEvents= 'none';
   styledTextElement.style.padding=window.getComputedStyle(textarea).getPropertyValue('padding');
