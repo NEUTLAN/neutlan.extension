@@ -16,11 +16,8 @@ chrome.storage.local.get(['token', 'activated'], function (result) {
 chrome.storage.onChanged.addListener(function (changes, namespace) {
 
   for (var key in changes) {
-    console.log("Runtimee")
     if (key == 'activated') {
-      console.log(changes[key].newValue)
       localStorage.setItem("activated", changes[key].newValue);
-      console.log(localStorage.getItem('activated'))
       this.removeUnderline();
     }
     if (key == 'token' ) {
@@ -32,12 +29,9 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
 // Define function to remove underline
 function removeUnderline() {
-  console.log("ın",localStorage.getItem('activated'))
   if(localStorage.getItem('activated')== true){
-    console.log("add container")
     this.updateContainer();
   }else{
-    console.log("delete container")
     styledTextElement.innerHTML = ""
   }
   
@@ -73,7 +67,6 @@ updateContainer = () => {
   sentencesArray.map(async (index, number) => {
     if (index.bias) {
       // apply styles if the sentence should be underlined in red
-      console.log("Geldi")
       count = 1 + count;
       numberElement.innerHTML = count;
       const spanElement = document.createElement('span');
@@ -99,7 +92,7 @@ updateContainer = () => {
 
   const format = `
   position: absolute;
-  bottom: 2px;
+  bottom: 4px;
   right: -10px;
   height: 30px;
   pointer-events: none;
@@ -122,23 +115,17 @@ updateContainer = () => {
 //Fix it
 handlePredict = (number) => {
   let item = sentencesArray[number]
-  console.log("gelddi")
   let token = localStorage.getItem("token");
-  console.log(token)
   let checked = localStorage.getItem("activated");
-  console.log(checked)
   const body = {
     text: item.sentence,
   };
 
   if (checked) {
-    console.log("gelddi")
     post('/model/predict', token, body)
       .then((response) => {
         if (response.ok) {
-          console.log(response)
           return response.json().then((data) => {
-            console.log("Data", data)
             if (data.bias === true) {
               sentencesArray[number].bias = true;
               updateContainer();
@@ -151,9 +138,7 @@ handlePredict = (number) => {
           });
 
         } else {
-          console.log(response)
           response.json().then((data) => {
-            console.log(data);
           });
         }
       })
@@ -166,19 +151,28 @@ handlePredict = (number) => {
 };
 myEventListener = (event) => {
   target = event.target;
-  event.target.classList.add('underline');
-  console.log( event)
   const myArray = event.target.value.split(/(?<=\.|\?|\!)\s/g);
-  sentencesArray = [];
-  myArray.map((item) => {
-    sentencesArray.push({
-      sentence: item,
-      bias: false,
-      isChecked: false,
-    });
+  //sentencesArray = [];
+  myArray.map((item,index) => {
+    if(index< sentencesArray.length && sentencesArray[index].text ==item){
+
+    }else if (index< sentencesArray.length && sentencesArray[index].text !=item){
+      sentencesArray[index] = {
+        sentence: item,
+        bias: false,
+        isChecked: false,
+      };
+    }
+    else{
+      sentencesArray.push({
+        sentence: item,
+        bias: false,
+        isChecked: false,
+      });
+    }
+
   });
   const textarea = event.target;
-  styledTextElement.innerHTML = "";
   styledTextElement.style.position = 'absolute';
   styledTextElement.style.top = `2px`;
   styledTextElement.style.left = `0px`;
@@ -195,10 +189,9 @@ myEventListener = (event) => {
   parent.appendChild(styledTextElement)
   document.body.onkeyup = function (e) {
     let checked = localStorage.getItem("activated");
-    if (e.key === "." || e.code === "Slash") {
+    if (e.key.match(/(?<=\.|\?|\!)\s/g) || e.code.match(/(?<=\.|\?|\!)\s/g) || e.code === "Slash") {
       if (checked) {
         styledTextElement.innerHTML = "";
-        console.log(event.target.value)
         sentencesArray.map((index, number) => {
           if (index.isChecked === false) {
             handlePredict(number);
