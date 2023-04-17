@@ -114,7 +114,8 @@ updateContainer = () => {
 };
 //Fix it
 handlePredict = (number) => {
-  let item = sentencesArray[number]
+  let item = sentencesArray[number];
+  console.log(item);
   let token = localStorage.getItem("token");
   let checked = localStorage.getItem("activated");
   const body = {
@@ -128,11 +129,11 @@ handlePredict = (number) => {
           return response.json().then((data) => {
             if (data.bias === true) {
               sentencesArray[number].bias = true;
-              updateContainer();
+              this.updateContainer();
             } else if (data.bias === false) {
               item.bias = false;
               sentencesArray[number].bias = false;
-              updateContainer();
+              this.updateContainer();
             }
 
           });
@@ -152,26 +153,48 @@ handlePredict = (number) => {
 myEventListener = (event) => {
   target = event.target;
   const myArray = event.target.value.split(/(?<=\.|\?|\!)\s/g);
-  //sentencesArray = [];
-  myArray.map((item,index) => {
-    if(index< sentencesArray.length && sentencesArray[index].text ==item){
-
-    }else if (index< sentencesArray.length && sentencesArray[index].text !=item){
-      sentencesArray[index] = {
-        sentence: item,
-        bias: false,
-        isChecked: false,
-      };
-    }
-    else{
+  sentencesArray = [];
+  myArray.map((item) => {
+    sentencesArray.push({
+      sentence: item,
+      bias: false,
+      isChecked: false,
+    });
+  });
+  //sentencesArray = []; 
+  /**
+  if(myArray.length < sentencesArray.length){
+    sentencesArray = [];
+    myArray.map((item) => {
       sentencesArray.push({
         sentence: item,
         bias: false,
         isChecked: false,
       });
-    }
-
-  });
+    });
+  }else{
+    myArray.map((item,index) => {
+      if(index< sentencesArray.length && sentencesArray[index].text ==item){
+  
+      }else if (index < sentencesArray.length && sentencesArray[index].text !=item){
+        sentencesArray[index] = {
+          sentence: item,
+          bias: false,
+          isChecked: false,
+        };
+      }
+      else{
+        sentencesArray.push({
+          sentence: item,
+          bias: false,
+          isChecked: false,
+        });
+      }
+      console.log(sentencesArray)
+  
+    });
+  }
+   */
   const textarea = event.target;
   styledTextElement.style.position = 'absolute';
   styledTextElement.style.top = `2px`;
@@ -181,7 +204,10 @@ myEventListener = (event) => {
   styledTextElement.style.width = window.getComputedStyle(textarea).getPropertyValue('width');
   styledTextElement.style.zIndex = "5";
   styledTextElement.style.pointerEvents= 'none';
-  styledTextElement.style.padding=window.getComputedStyle(textarea).getPropertyValue('padding');
+  styledTextElement.style.paddingTop=window.getComputedStyle(textarea).getPropertyValue('padding-top');
+  styledTextElement.style.paddingLeft=window.getComputedStyle(textarea).getPropertyValue('padding-left');
+  styledTextElement.style.paddingRight=window.getComputedStyle(textarea).getPropertyValue('padding-right');
+  styledTextElement.style.paddingBottom=window.getComputedStyle(textarea).getPropertyValue('padding-bottom');
   styledTextElement.style.margin= window.getComputedStyle(textarea).getPropertyValue('margin');
   size =  window.getComputedStyle(textarea).getPropertyValue('font-size');
   font = window.getComputedStyle(textarea).getPropertyValue('font-family');
