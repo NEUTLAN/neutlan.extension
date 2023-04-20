@@ -197,9 +197,8 @@ myEventListener = (event) => {
    */
   const textarea = event.target;
   styledTextElement.style.position = 'absolute';
-  styledTextElement.style.top = `2px`;
-  styledTextElement.style.left = `0px`;
-  styledTextElement.style.height = window.getComputedStyle(textarea).getPropertyValue('height');
+  styledTextElement.style.inset = `0`;
+  //styledTextElement.style.height = window.getComputedStyle(textarea).getPropertyValue('height');
   styledTextElement.style.boxSizing = window.getComputedStyle(textarea).getPropertyValue('box-sizing');
   styledTextElement.style.width = window.getComputedStyle(textarea).getPropertyValue('width');
   styledTextElement.style.zIndex = "5";
@@ -208,7 +207,8 @@ myEventListener = (event) => {
   styledTextElement.style.paddingLeft=window.getComputedStyle(textarea).getPropertyValue('padding-left');
   styledTextElement.style.paddingRight=window.getComputedStyle(textarea).getPropertyValue('padding-right');
   styledTextElement.style.paddingBottom=window.getComputedStyle(textarea).getPropertyValue('padding-bottom');
-  styledTextElement.style.margin= window.getComputedStyle(textarea).getPropertyValue('margin');
+  styledTextElement.style.margin= '0 1px';
+  //styledTextElement.style.lineHeight= window.getComputedStyle(textarea).getPropertyValue('line-height');
   size =  window.getComputedStyle(textarea).getPropertyValue('font-size');
   font = window.getComputedStyle(textarea).getPropertyValue('font-family');
   parent = textarea.parentNode;

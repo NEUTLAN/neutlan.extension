@@ -22,7 +22,8 @@ function App() {
               localStorage.removeItem("extension-token");
               console.log(data.token)
               localStorage.setItem("token", data.token);
-              chrome.storage.local.set({ token: data.token, activated: data.settings.extension_activated }, function () {
+              localStorage.setItem("activated", true);
+              chrome.storage.local.set({ token: data.token, activated: true }, function () {
                 console.log("Values saved");
               });
               setToken(data.token);
