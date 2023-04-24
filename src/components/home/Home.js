@@ -106,6 +106,7 @@ const Home = () => {
 
   useEffect(() => {
     setIsChecked(localStorage.getItem("activated"));
+    console.log(isChecked)
   }, []);
 /*
   useEffect( () => {
