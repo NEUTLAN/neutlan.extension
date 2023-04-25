@@ -10,9 +10,9 @@ import Home from "./components/home/Home.js";
 function App() {
   const [token, setToken] = useState("");
   const chrome = window.chrome;
+
   useEffect(() => {
     const userToken = localStorage.getItem("extension-token");
-
     if (userToken) {
       console.log('userToken ', userToken);
       API.post('/user/auth/sign_in_with_token', null, { 'token': userToken })
@@ -22,12 +22,12 @@ function App() {
               localStorage.removeItem("extension-token");
               console.log(data.token)
               localStorage.setItem("token", data.token);
-              localStorage.setItem("activated", true);
-              chrome.storage.local.set({ token: data.token, activated: true }, function () {
+              console.log(data.settings.extension_activated)
+              chrome.storage.local.set({ token: data.token, activated: data.settings.extension_activated }, function () {
                 console.log("Values saved");
               });
               setToken(data.token);
-              localStorage.setItem("extensionActivated", data.settings.extension_activated);
+              localStorage.setItem("activated", data.settings.extension_activated);
               console.log("token: ", data.token)
             })
           } else {
@@ -63,5 +63,3 @@ function App() {
   );
 }
 export default App;
-export const token = localStorage.getItem("token");
-export const activated = localStorage.getItem("extensionActivated");

@@ -31,6 +31,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
   for (var key in changes) {
     if (key == 'activated') {
       localStorage.setItem("activated", changes[key].newValue);
+      console.log("value change")
       this.removeUnderline();
     }
     if (key == 'token') {
@@ -46,7 +47,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 
 // Define function to remove underline
 function removeUnderline() {
-  if (localStorage.getItem('activated') == true) {
+  if (localStorage.getItem('activated') == "true") {
     this.updateContainer();
   } else {
     styledTextElement.innerHTML = ""
@@ -136,7 +137,7 @@ handlePredict = (number) => {
   let item = sentencesArray[number];
   console.log(item);
   let token = localStorage.getItem("token");
-  let checked = localStorage.getItem("activated");
+  let checked = Boolean(localStorage.getItem("activated"));
   const body = {
     text: item.sentence,
   };

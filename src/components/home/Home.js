@@ -24,34 +24,24 @@ import neutlan_extension_header from "../../assets/img/neutlan_extension_header.
 
 const Home = () => {
   console.log(localStorage.getItem('token'))
-  const [isChecked, setIsChecked] = useState(false);
-  const navigate = useNavigate();
+
+  const [isChecked, setIsChecked] = useState(true);
   const chrome = window.chrome;
 
-  const handleCheckbox = (event) => {
-    setIsChecked(event.target.checked);
-    chrome.storage.local.set({activated:isChecked}, function() {
-      console.log("Values saved");
-    });
-    localStorage.setItem("activated",isChecked);
-  };
-   /*
-  const handleCheckbox = (event) => {
-    localStorage.setItem("activated",isChecked);
-    chrome.storage.local.set({activated:isChecked}, function() {
-      console.log("Values saved");
-    });
 
- 
+  const handleCheckbox = (event) => {
+    let token = localStorage.getItem("token");
+    const check = !isChecked;
+    setIsChecked(check);   
     if (isChecked) {
       API.post('/user/deactivate', token)
       .then((response) => {
-        if (response.ok) {
-          setIsChecked(!isChecked);
-          localStorage.setItem("activated", !isChecked);
-          chrome.storage.local.set({activated: !isChecked}, function() {
-            console.log("Values saved");
-          });
+        if (response.ok) {    
+          
+          localStorage.setItem("activated",check);
+          chrome.storage.local.set({activated: check}, function() {
+            console.log("Values saved",check);
+          });   
         } else {
           return response.json().then((data) => {
             //alert(data.error);
@@ -64,12 +54,12 @@ const Home = () => {
     } else {
       API.post('/user/activate', token)
       .then((response) => {
-        if (response.ok) {
-          setIsChecked(!isChecked);
-          localStorage.setItem("activated", !isChecked);
-          chrome.storage.local.set({activated: !isChecked}, function() {
-            console.log("Values saved");
+        if (response.ok) {      
+          localStorage.setItem("activated", check);
+          chrome.storage.local.set({activated: check}, function() {
+            console.log("Values saved",check);
           });
+         
         } else {
           return response.json().then((data) => {
             //alert(data.error);
@@ -82,18 +72,18 @@ const Home = () => {
     }
   
   };
-  */
+
   const goWebsite = () => {
     window.open("https://neutlan.com/");
   }
 
   const signOut = () => {
     localStorage.removeItem("extension-token");
-    localStorage.removeItem("extensionActivated");
+    localStorage.removeItem("activated");
     localStorage.removeItem("token");
 
     window.location.reload()
-
+    setIsChecked(false);
     chrome.storage.local.remove('activated', function() {
       console.log('Checked value deleted');
     });
@@ -103,16 +93,16 @@ const Home = () => {
 
 
   }
+  useEffect(() => { 
+    
+    if(localStorage.getItem("activated") == "true"){
+      setIsChecked(true)
+    }else{
+      setIsChecked(false)
+    }
 
-  useEffect(() => {
-    setIsChecked(localStorage.getItem("activated"));
-    console.log(isChecked)
   }, []);
-/*
-  useEffect( () => {
-    localStorage.setItem("activated", isChecked);
-  }, [isChecked]);
-*/
+
   return (
     <Fragment>
       <StyledImg src={neutlan_extension_header}></StyledImg>
