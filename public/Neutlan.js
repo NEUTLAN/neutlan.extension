@@ -17,12 +17,13 @@ let styledTextElement = document.createElement('div');
 let size = 'large';
 let font = 'arial, sans-serif';
 // Toke taken fromthe choreme storage you always loged in if you not delete chorome storage and logout
-chrome.storage.local.get(['token', 'activated'], function (result) {
+chrome.storage.local.get(['token', 'activated', 'color'], function (result) {
   let token = result.token;
   let checked = result.activated;
+  let color = result.color;
   localStorage.setItem("token", token);
   localStorage.setItem("activated", checked)
-
+  localStorage.setItem("color", color)
 });
 // In your background page script
 
@@ -38,6 +39,14 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
       chrome.storage.local.get("token", function(result) {
         if (result.token) {
           window.location.reload()
+        }})
+      
+    }
+    if (key == 'color') {
+      chrome.storage.local.get("color", function(result) {
+        if (result.color) {
+          localStorage.setItem("color", result.color)
+          removeUnderline()
         }})
       
     }
@@ -84,6 +93,7 @@ updateContainer = () => {
   styledTextElement.innerHTML = ""
   
   sentencesArray.map(async (index, number) => {
+    const color = localStorage.getItem('color')
     if (index.bias) {
 
       count = 1 + count;
@@ -92,7 +102,7 @@ updateContainer = () => {
       spanElement.classList.add('span_neutlan');
       spanElement.style.textDecoration = 'underline';
       spanElement.style.textDecorationThickness = '2px';
-      spanElement.style.textDecorationColor = 'red';
+      spanElement.style.textDecorationColor = color;
       spanElement.style.fontSize = size;
       spanElement.style.lineHeight = size;
       spanElement.style.fontFamily = font;
@@ -137,7 +147,11 @@ handlePredict = (number) => {
   let item = sentencesArray[number];
   console.log(item);
   let token = localStorage.getItem("token");
-  let checked = Boolean(localStorage.getItem("activated"));
+  if (localStorage.getItem("activated") == "true") {
+    checked = true
+  } else {
+    checked = false
+  }
   const body = {
     text: item.sentence,
   };

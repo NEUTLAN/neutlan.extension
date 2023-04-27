@@ -5,7 +5,6 @@ export const StyledImg = styled.img.attrs((input) => ({
   src: input.src,
 }))`
   width: ${style.width};
-  height: ${style.height_header};
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.4);
   border-radius: 2%;
 `;
@@ -14,7 +13,7 @@ export const StyledTitleDiv = styled.div`
   align-items: center;
 `;
 export const StyledDivFirst = styled.div`
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 10px;
   margin-left: 10px;
   max-width: ${style.width};
@@ -32,6 +31,7 @@ export const StyledHr = styled.hr`
   margin-top: 5px;
   margin-bottom: 5px;
   border: 0.3px solid gray;
+  width: 80%;
 `;
 
 export const StyledDivSecond = styled.div`
@@ -75,7 +75,7 @@ export const StyledTextLabel = styled.label`
 
 export const StyledSelect = styled.select`
   width: 150px;
-  height: 25px;
+  height: 20px;
   margin-right: 10px;
   background: white;
   color: gray;
@@ -98,23 +98,37 @@ export const StyledSelect = styled.select`
 `;
 
 export const StyledDivIcons = styled.div`
-  max-width: ${style.width};
-  max-height: 50px;
+
+
   justify-content: flex-start;
   display: flex;
+  color:black;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  padding: 2%;
+  align-items: center;
+  width: 92%;
+  height: 14%;
+  border-radius: 4px;
+  margin-left: 2%;
+  :hover {
+    background: linear-gradient(to right, #333363, #505099cc, #303066);
+    color: white;
+    box-shadow: -5px 6px 6px rgba(0,0,0,0.3);
+  }
 `;
 
 export const StyledIconLabel = styled.label`
   font-size: ${style.font_size};
   font-family: ${style.font_family};
-  color: black;
   align-items: center;
-  font-weight: bold;
+  font-weight: 500;
   padding-left: 5%;
+  line-height: 20px;
+  text-align: center;
   cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
 `;
 
 export const StyledInformationContainer = styled.div`
@@ -123,11 +137,13 @@ export const StyledInformationContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  justify-content: space-around;
+  justify-content: space-between;
 `;
 
 export const StyledFooterText = styled.label`
 width: ${style.width};
+width: 100%;
+justify-content: space-around;
 font-size: ${style.font_size};
 font-family: ${style.font_family};
 color: ${style.font_color};
@@ -135,7 +151,6 @@ display: flex;
 align-items: center;
 text-align: center;
 margin-top: 10px;
-margin-left: 10px;
 `;
 
 
@@ -146,3 +161,25 @@ export const StyledWelcomeFirst = styled.div`
 export const StyledDivWelcomeSecond = styled.div`
 `;
 
+export const ColorPicker = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-left: 10px;
+margin-right: 10px;
+`;
+export const ColorPickerLabel = styled.label`
+  align-items: center;
+  font-size: 12px;
+  font-size: 12px;
+    font-family: 'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Helvetica Neue',sans-serif,Arial;
+`;
+export const ColorPickerInput = styled.input`
+  align-items: center;
+  border-radius: 4px;
+    border-width: 0px;
+    border-style: solid;
+    border-color: buttonborder;
+    border-image: initial;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+`;

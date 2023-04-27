@@ -5,6 +5,7 @@ import {
   StyledInformationContainer,
   StyledTitleDiv,
   StyledTitle,
+  StyledP,
   StyledDivSecond,
   StyledFooterText,
   StyledHr,
@@ -57,6 +58,7 @@ const Login = () => {
       <StyledInformationContainer>
         <StyledTitleDiv>
           <StyledTitle> Welcome to Neutlan</StyledTitle>
+          <StyledP> We provide the evaluation of content in terms of gender-biased phrases. It checks the biased phrases and sentences in the content and demonstrates these found mistakes to the user. </StyledP>
         </StyledTitleDiv>
         <StyledDivSecond>
           <StyledButton onClick={signIn}> Sign In</StyledButton>
@@ -64,7 +66,7 @@ const Login = () => {
         <div>
         <StyledHr />
         <StyledFooterText>
-        Since Nov 5,2022
+        Since Nov 5, 2022
         </StyledFooterText>
         </div>
       </StyledInformationContainer>
