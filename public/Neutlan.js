@@ -48,23 +48,24 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
   for (var key in changes) {
     if (key == 'activated') {
       localStorage.setItem("activated", changes[key].newValue);
-      console.log("value change")
       this.removeUnderline();
     }
     if (key == 'token') {
-      chrome.storage.local.get("token", function(result) {
+      chrome.storage.local.get("token", function (result) {
         if (result.token) {
           window.location.reload()
-        }})
-      
+        }
+      })
+
     }
     if (key == 'color') {
-      chrome.storage.local.get("color", function(result) {
+      chrome.storage.local.get("color", function (result) {
         if (result.color) {
           localStorage.setItem("color", result.color)
-          removeUnderline()
-        }})
-      
+          changeColor()
+        }
+      })
+
     }
   }
 });
@@ -73,189 +74,104 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 // Define function to remove underline
 function removeUnderline() {
   if (localStorage.getItem('activated') == "true") {
+    chrome.storage.local.get("token", function (result) {
+      if (result.token) {
+        let token = result.token;
+        const body = {
+          content: paragraph,
+        };
+        post('/model/process', token, body)
+          .then((response) => {
+            if (response.ok) {
+              return response.json().then((data) => {
+                sentencesArray = data.file_content;
+                styledTextElement.innerHTML = ""
+                updateContainer();
+              });
+
+            } else {
+              response.json().then((data) => {
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    })
     this.updateContainer();
   } else {
     styledTextElement.innerHTML = ""
   }
 
 }
-
-
-
+function changeColor() {
+  if (localStorage.getItem('activated') == "true") {
+    this.updateContainer();
+  } else {
+    styledTextElement.innerHTML = ""
+  }
+}
 
 updateContainer = () => {
-  const body = {
-    content: paragraph,
-  }; 
-  chrome.storage.local.get("token", function(result) {
-    if (result.token) {
-      let token = result.token;
-      post('/model/process', token, body)
-      .then((response) => {
-        if (response.ok) {
-          return response.json().then((data) => {
-            console.log(data.file_content)
-            sentencesArray = data.file_content;
-            console.log(sentencesArray)
-            const numberElement = document.createElement('div');
-            let count = 0;
-            numberElement.innerHTML = count;
-            styledTextElement.innerHTML = ""
-            sentencesArray.map(async (index, number) => {
-              const color = localStorage.getItem('color')
-              if (index.biased) {
-                count = 1 + count;
-                numberElement.innerHTML = count;
-                const spanElement = document.createElement('span');
-                spanElement.classList.add('span_neutlan');
-                spanElement.style.textDecoration = 'underline';
-                spanElement.style.textDecorationThickness = '2px';
-                spanElement.style.textDecorationColor = color;
-                spanElement.style.fontSize = size;
-                spanElement.style.lineHeight = size;
-                spanElement.style.fontFamily = font;
-                spanElement.innerHTML = index.content;
-                styledTextElement.appendChild(spanElement);
-              } else {
-                // otherwise, apply default styles
-                const spanElement = document.createElement('span');
-                spanElement.classList.add('span_neutlan');
-                spanElement.style.fontSize = size;
-                spanElement.style.fontFamily = font;
-                spanElement.style.lineHeight = size;
-                spanElement.innerHTML = index.content;
-                styledTextElement.appendChild(spanElement);
-              }
-              const format = `
-              position: absolute;
-              bottom: 4px;
-              right: 5px;
-              height: 30px;
-              pointer-events: none;
-              width: 30px;
-              font-size: 15px;
-              color: #fff;
-              border-radius: 50%;
-              display: flex;
-              background-color: #313265;
-              flex-wrap: nowrap;
-              justify-content: space-around;
-              align-items: center;
-            `.trim();
-        
-              // Set the styles on the number element
-              numberElement.style.cssText = format;
-              styledTextElement.appendChild(numberElement);
-            });
-          });
-
-        } else {
-          response.json().then((data) => {
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-
-
-
-}
-}
-)
-
-};
-/*
-myEventListener = (event) => {
-  chrome.storage.local.get("token", function(result) {
-    if (result.token) {
-    let token = result.token;
-    paragraph = event.target.value;
-    const textarea = event.target;
-    const styles = window.getComputedStyle(textarea);
-    styledTextElement.style.cssText = `
+  styledTextElement.innerHTML = ""
+  const numberElement = document.createElement('div');
+  let count = 0;
+  numberElement.innerHTML = count;
+  sentencesArray.map(async (index, number) => {
+    const color = localStorage.getItem('color')
+    if (index.biased) {
+      count = 1 + count;
+      numberElement.innerHTML = count;
+      const spanElement = document.createElement('span');
+      spanElement.classList.add('span_neutlan');
+      spanElement.style.textDecoration = 'underline';
+      spanElement.style.textDecorationThickness = '2px';
+      spanElement.style.textDecorationColor = color;
+      spanElement.style.fontSize = size;
+      spanElement.style.lineHeight = size;
+      spanElement.style.fontFamily = font;
+      spanElement.innerHTML = index.content;
+      styledTextElement.appendChild(spanElement);
+    } else {
+      // otherwise, apply default styles
+      const spanElement = document.createElement('span');
+      spanElement.classList.add('span_neutlan');
+      spanElement.style.fontSize = size;
+      spanElement.style.fontFamily = font;
+      spanElement.style.lineHeight = size;
+      spanElement.innerHTML = index.content;
+      styledTextElement.appendChild(spanElement);
+    }
+    const format = `
       position: absolute;
-      inset: 0;
+      bottom: 4px;
+      right: 5px;
+      height: 30px;
       pointer-events: none;
-      height: ${styles.getPropertyValue('height')};
-      box-sizing: ${styles.getPropertyValue('box-sizing')};
-      width: ${styles.getPropertyValue('width')};
-      font-size: ${styles.getPropertyValue('font-size')};
-      line-height: ${styles.getPropertyValue('line-height')};
-      font-family: ${styles.getPropertyValue('font-family')};
-      padding-top: ${styles.getPropertyValue('padding-top')};
-      padding-right: ${styles.getPropertyValue('padding-right')};
-      padding-bottom: ${styles.getPropertyValue('padding-bottom')};
-      padding-left: ${styles.getPropertyValue('padding-left')};
-      margin-top: ${styles.getPropertyValue('margin-top')};
-      margin-right: ${styles.getPropertyValue('margin-right')};
-      margin-bottom: ${styles.getPropertyValue('margin-bottom')};
-      margin-left: ${styles.getPropertyValue('margin-left')};
-      z-index: 5;
-      overflow: hidden;
-      white-space: pre-wrap;
-    `;
-    size = window.getComputedStyle(textarea).getPropertyValue('font-size');
-    font = window.getComputedStyle(textarea).getPropertyValue('font-family');
-    parent = textarea.parentNode;
-    parent.appendChild(styledTextElement)
-    let isExecuted = false;
+      width: 30px;
+      font-size: 15px;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      background-color: #313265;
+      flex-wrap: nowrap;
+      justify-content: space-around;
+      align-items: center;
+    `.trim();
+    // Set the styles on the number element
+    numberElement.style.cssText = format;
+    styledTextElement.appendChild(numberElement);
+  });
 
-      let checked ;
-      if (localStorage.getItem("activated") == "true") {
-        checked = true
-      } else {
-        checked = false
-      }
-      let prevParagraph = paragraph;
-      setInterval(() => {
-        paragraph = event.target.value;
-        if (paragraph !== prevParagraph && checked) {
-          styledTextElement.innerHTML = "";
-          updateContainer();
-          prevParagraph = paragraph;
-        }
-      }, 5000);
-      /*
-      const targetNode = event.target;
-      paragraph = event.target.value;
-     
-      if ((e.target.value.match(/(?<=\.|\?|\!)\s/g) || e.inputType === "deleteContentBackward") && checked) {
-        setTimeout(function() {
-          styledTextElement.innerHTML = "";
-          console.log("hh")
-          updateContainer();
-          isExecuted = true;
-        }, 5000);
-      }
-      if ((e.key === "." || e.key === "?" || e.key === "!") && checked) {
-        updateContainer();
-        styledTextElement.innerHTML = "";
-        console.log("aaaa")
-      } else if (e.key === "Backspace" && checked) {
-        const inputString = targetNode.value;
-        const lastChar = inputString[inputString.length - 1];
-        if (lastChar === "." || lastChar === "?" || lastChar === "!") {
-          styledTextElement.innerHTML = "";
-          updateContainer();
-        }
-      }
-      
-    };
-  }
 
-)
- 
 };
-
-window.addEventListener("keyup", myEventListener);
-*/
 
 let prevParagraph = "";
 let intervalId = null;
 
 myEventListener = (event) => {
-  chrome.storage.local.get("token", function(result) {
+  chrome.storage.local.get("token", function (result) {
     if (result.token) {
       let token = result.token;
       paragraph = event.target.value;
@@ -289,22 +205,49 @@ myEventListener = (event) => {
       parent.appendChild(styledTextElement);
       let isExecuted = false;
 
-      let checked ;
+      let checked;
       if (localStorage.getItem("activated") == "true") {
         checked = true
       } else {
         checked = false
       }
-      
+
       clearInterval(intervalId);
       intervalId = setInterval(() => {
         paragraph = event.target.value;
         if (paragraph !== prevParagraph && checked) {
           styledTextElement.innerHTML = "";
-          updateContainer();
-          prevParagraph = paragraph;
+          const body = {
+            content: paragraph,
+          };
+          chrome.storage.local.get("token", function (result) {
+            if (result.token) {
+              let token = result.token;
+              post('/model/process', token, body)
+                .then((response) => {
+                  if (response.ok) {
+                    return response.json().then((data) => {
+                      sentencesArray = data.file_content;
+                      styledTextElement.innerHTML = ""
+                      updateContainer();
+                      prevParagraph = paragraph;
+                    });
+
+                  } else {
+                    response.json().then((data) => {
+                    });
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+
+            }
+          }
+          )
+
         }
-      }, 5000);
+      }, 2000);
     }
   });
 };

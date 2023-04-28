@@ -24,27 +24,7 @@ const BackgroundFunction = () => {
     
   };
   sentencesGet();
-  console.log(sentences);
 
-  //   fetch(" https://neutlan.com/api/predict", {
-  //     method: "POST",
-  //     headers: {
-  //       Authorization: "Token c181f59a5eb178bc38bc65b1f98772656e4c1681",
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (response.ok) {
-  //       } else {
-  //         return response.json().then((data) => {
-  //           alert(data.error);
-  //         });
-  //       }
-  //     })
-
-  //     .catch((error) => {
-  //       console.error("Error:", error);
-  //     });
 
   return <div>BackgroundFunction</div>;
 };

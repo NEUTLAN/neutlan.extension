@@ -25,8 +25,6 @@ import {
 import neutlan_extension_header from "../../assets/img/neutlan_extension_header.png";
 
 const Home = () => {
-  console.log(localStorage.getItem('token'))
-
   const [isChecked, setIsChecked] = useState(true);
   const [color, setColor] = useState("#00ff00");
   const chrome = window.chrome;
@@ -43,7 +41,6 @@ const Home = () => {
 
             localStorage.setItem("activated", check);
             chrome.storage.local.set({ activated: check }, function () {
-              console.log("Values saved", check);
             });
           } else {
             return response.json().then((data) => {
@@ -60,7 +57,6 @@ const Home = () => {
           if (response.ok) {
             localStorage.setItem("activated", check);
             chrome.storage.local.set({ activated: check }, function () {
-              console.log("Values saved", check);
             });
 
           } else {
@@ -79,7 +75,6 @@ const Home = () => {
 
     if (chrome.storage) {
         chrome.storage.local.set({ color: event.target.value }, function () {
-          console.log("Values saved", color);
         });
     } else {
         console.error("chrome.storage is not available");
@@ -99,10 +94,8 @@ const Home = () => {
     window.location.reload()
     setIsChecked(false);
     chrome.storage.local.remove('activated', function () {
-      console.log('Checked value deleted');
     });
     chrome.storage.local.remove('token', function () {
-      console.log('Token value deleted');
     });
 
 

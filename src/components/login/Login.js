@@ -18,7 +18,6 @@ const Login = () => {
   
   const signIn = () => {
     let token = generateToken(128);
-    console.log("Token: ", token)
     localStorage.removeItem("extension-token");
     localStorage.setItem("extension-token", token);
     window.open("https://neutlan.com/sign-in?" + token);
