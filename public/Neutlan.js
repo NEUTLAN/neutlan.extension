@@ -31,6 +31,7 @@ style.textContent = `
 // Add the style element to the document head
 document.head.appendChild(style);
 let styledTextElement = document.createElement('div');
+styledTextElement.classList.add('neutlan_div');
 let size = 'large';
 let font = 'arial, sans-serif';
 // Toke taken fromthe choreme storage you always loged in if you not delete chorome storage and logout
@@ -179,7 +180,7 @@ myEventListener = (event) => {
       const styles = window.getComputedStyle(textarea);
       styledTextElement.style.cssText = `
         position: absolute;
-        inset: 0;
+        inset: ${styles.getPropertyValue('inset')};
         pointer-events: none;
         height: ${styles.getPropertyValue('height')};
         box-sizing: ${styles.getPropertyValue('box-sizing')};
