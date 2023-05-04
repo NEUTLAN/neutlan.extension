@@ -41,7 +41,7 @@ chrome.storage.local.get(['token', 'activated', 'color'], function (result) {
   let color = result.color;
   localStorage.setItem("token", token);
   localStorage.setItem("activated", checked)
-  localStorage.setItem("color", color)
+  localStorage.setItem("color", color?color:"#00ff00")
 });
 // In your background page script
 
