@@ -180,7 +180,7 @@ myEventListener = (event) => {
       const styles = window.getComputedStyle(textarea);
       styledTextElement.style.cssText = `
         position: absolute;
-        inset: ${styles.getPropertyValue('inset')};
+        inset: 0;
         pointer-events: none;
         height: ${styles.getPropertyValue('height')};
         box-sizing: ${styles.getPropertyValue('box-sizing')};

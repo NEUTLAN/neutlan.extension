@@ -21,7 +21,8 @@
     "scripting"
   ],
   "host_permissions": [
-    "*://*.google.com/"
+    "*://*.google.com/",
+    "https://*/"
   ],
   "content_scripts": [
   {
